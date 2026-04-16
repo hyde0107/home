@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@layer base {
+  /* Prevent iPhone zoom on input focus by ensuring font-size is at least 16px */
+  @media screen and (max-width: 767px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+  }
+  
+  input, textarea, select {
+    @apply md:text-sm;
+  }
+
+  body {
+    touch-action: manipulation;
+  }
+}
