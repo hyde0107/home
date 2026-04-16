@@ -9,15 +9,24 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      # これを追加することで Node.js 24 を強制的に使います
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
-      - run: npm install
-      - run: npm run build
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24 # 明示的に最新の24を使うように指定
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-      - uses: actions/deploy-pages@v4
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
