@@ -7,7 +7,7 @@ import { loginWithGoogle, logout } from '../lib/firebase';
 
 export default function Layout() {
   const location = useLocation();
-  const { user, isConfigured } = useData();
+  const { user, isConfigured, isLoadingAuth } = useData();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItems = [
@@ -144,6 +144,8 @@ export default function Layout() {
                 <div className="text-slate-400 font-medium">Firebaseの設定を待機中...</div>
               </div>
             </div>
+          ) : isLoadingAuth ? (
+            <div className="fixed inset-0 bg-slate-50 z-[100]" />
           ) : !user ? (
             <div className="fixed inset-0 flex items-center justify-center bg-slate-50 p-4 z-[100]">
               <div className="max-w-md w-full bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 text-center">

@@ -160,7 +160,15 @@ const DayColumn: React.FC<DayColumnProps> = ({
   const isToday = isSameDay(date, new Date());
   
   const dayTasks = tasks.filter(t => t.deadline === dateStr);
-  const dayPlans = studyPlans.filter(p => p.date === dateStr);
+  const dayPlans = useMemo(() => {
+    return studyPlans
+      .filter(p => p.date === dateStr)
+      .sort((a, b) => {
+        const indexA = materials.findIndex(m => m.id === a.materialId);
+        const indexB = materials.findIndex(m => m.id === b.materialId);
+        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+      });
+  }, [studyPlans, dateStr, materials]);
 
   const [isAddingPlan, setIsAddingPlan] = useState(false);
   const [selectedMaterialId, setSelectedMaterialId] = useState(activeMaterials[0]?.id || 'none');
@@ -334,8 +342,14 @@ export default function WeeklyPlanner() {
   const days = Array.from({ length: 7 }).map((_, i) => addDays(weekStart, i));
 
   const currentWeekGoals = useMemo(() => {
-    return weeklyGoals.filter(g => g.weekStartDate === weekStartStr && g.goal.trim() !== '');
-  }, [weeklyGoals, weekStartStr]);
+    return weeklyGoals
+      .filter(g => g.weekStartDate === weekStartStr && g.goal.trim() !== '')
+      .sort((a, b) => {
+        const indexA = materials.findIndex(m => m.id === a.materialId);
+        const indexB = materials.findIndex(m => m.id === b.materialId);
+        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+      });
+  }, [weeklyGoals, weekStartStr, materials]);
 
   const prevWeek = () => setCurrentDate(addDays(weekStart, -7));
   const nextWeek = () => setCurrentDate(addDays(weekStart, 7));
@@ -348,25 +362,16 @@ export default function WeeklyPlanner() {
       if (p.isCompleted) return false;
       const planDate = parseISO(p.date);
       return isBefore(planDate, today);
-    }).sort((a, b) => b.date.localeCompare(a.date));
-  }, [studyPlans, today]);
+    }).sort((a, b) => {
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
+      const indexA = materials.findIndex(m => m.id === a.materialId);
+      const indexB = materials.findIndex(m => m.id === b.materialId);
+      return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+    });
+  }, [studyPlans, today, materials]);
 
-  // Smart Suggestion Logic
+  // Smart Suggestion Logic has been removed as per user request to avoid auto-filling p.2~
   const getSuggestedPlanText = (materialId: string, targetDateStr: string) => {
-    // Find the most recent study plan for this material before the target date
-    const previousPlans = studyPlans
-      .filter(p => p.materialId === materialId && p.date < targetDateStr)
-      .sort((a, b) => b.date.localeCompare(a.date));
-
-    if (previousPlans.length === 0) return '';
-
-    const lastPlanText = previousPlans[0].planText;
-    // Try to extract the last number from the text (e.g., "p.1-50" -> 50)
-    const match = lastPlanText.match(/\d+(?!.*\d)/);
-    if (match) {
-      const lastNum = parseInt(match[0], 10);
-      return `p.${lastNum + 1}-`;
-    }
     return '';
   };
 

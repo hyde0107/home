@@ -1,15 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Material, Task, WeeklyGoal, StudyPlan, DiaryEntry } from '../types';
+import { MATERIAL_COLORS } from '../constants';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 // ★ デバッグモード: true にするとログイン不要でローカルストレージを使って動作確認できます
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 interface DataContextType {
   user: User | null;
   isConfigured: boolean;
+  isLoadingAuth: boolean;
   materials: Material[];
   tasks: Task[];
   weeklyGoals: WeeklyGoal[];
@@ -33,6 +35,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(DEBUG_MODE ? { uid: 'debug-user', email: 'debug@example.com' } as User : null);
   const [isConfigured, setIsConfigured] = useState(DEBUG_MODE ? true : !!auth);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(!DEBUG_MODE);
 
   const [materials, setMaterials] = useState<Material[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -42,9 +45,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (DEBUG_MODE) return;
-    if (!auth) return;
+    if (!auth) {
+      setIsLoadingAuth(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setIsLoadingAuth(false);
     });
     return () => unsubscribe();
   }, []);
@@ -238,10 +245,24 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const sortedMaterials = useMemo(() => {
+    return [...materials].sort((a, b) => {
+      const indexA = MATERIAL_COLORS.indexOf(a.color);
+      const indexB = MATERIAL_COLORS.indexOf(b.color);
+      
+      // If color is not found in the array (e.g., custom or changed), put it at the end
+      if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      
+      return indexA - indexB;
+    });
+  }, [materials]);
+
   return (
     <DataContext.Provider value={{
-      user, isConfigured,
-      materials, tasks, weeklyGoals, studyPlans, diaryEntries,
+      user, isConfigured, isLoadingAuth,
+      materials: sortedMaterials, tasks, weeklyGoals, studyPlans, diaryEntries,
       addMaterial, updateMaterial, deleteMaterial,
       addTask, updateTask, deleteTask, setWeeklyGoal,
       addStudyPlan, updateStudyPlan, deleteStudyPlan,

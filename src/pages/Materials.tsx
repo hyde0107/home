@@ -2,20 +2,13 @@ import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Plus, Trash2, PlayCircle, Archive, Inbox, Edit2, X, Save } from 'lucide-react';
 import { Material, MaterialStatus } from '../types';
+import { MATERIAL_COLORS } from '../constants';
 import { cn } from '../lib/utils';
-
-const COLORS = [
-  'bg-slate-500', 'bg-gray-500', 'bg-zinc-500', 'bg-neutral-500', 'bg-stone-500',
-  'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-yellow-500', 'bg-lime-500',
-  'bg-green-500', 'bg-emerald-500', 'bg-teal-500', 'bg-cyan-500', 'bg-sky-500',
-  'bg-blue-500', 'bg-indigo-500', 'bg-violet-500', 'bg-purple-500', 'bg-fuchsia-500',
-  'bg-pink-500', 'bg-rose-500'
-];
 
 export default function Materials() {
   const { materials, addMaterial, updateMaterial, deleteMaterial } = useData();
   const [newName, setNewName] = useState('');
-  const [selectedColor, setSelectedColor] = useState(COLORS[16]); // Default indigo
+  const [selectedColor, setSelectedColor] = useState(MATERIAL_COLORS[16]); // Default indigo
   const [activeTab, setActiveTab] = useState<MaterialStatus>('in-progress');
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -74,7 +67,7 @@ export default function Materials() {
           <div>
             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">テーマカラー</label>
             <div className="flex flex-wrap gap-3">
-              {COLORS.map(color => (
+              {MATERIAL_COLORS.map(color => (
                 <button
                   key={color}
                   type="button"
@@ -163,7 +156,7 @@ export default function Materials() {
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {COLORS.map(color => (
+                      {MATERIAL_COLORS.map(color => (
                         <button
                           key={color}
                           type="button"

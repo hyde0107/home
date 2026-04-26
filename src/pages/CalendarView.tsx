@@ -78,7 +78,11 @@ export default function CalendarView() {
               const isTodayDate = isToday(day);
               
               const dayTasks = tasks.filter(t => t.deadline === dateStr);
-              const dayPlans = studyPlans.filter(p => p.date === dateStr);
+              const dayPlans = studyPlans.filter(p => p.date === dateStr).sort((a, b) => {
+                const indexA = materials.findIndex(m => m.id === a.materialId);
+                const indexB = materials.findIndex(m => m.id === b.materialId);
+                return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+              });
 
               return (
                 <div 
@@ -136,14 +140,21 @@ export default function CalendarView() {
                           key={plan.id}
                           onClick={(e) => togglePlanStatus(e, plan.id, plan.isCompleted)}
                           className={cn(
-                            "text-[10px] px-2 py-1.5 rounded-lg border cursor-pointer flex items-center gap-2 transition-all duration-200",
+                            "text-[10px] px-2 py-1.5 rounded-lg border cursor-pointer flex flex-col items-start gap-0.5 transition-all duration-200",
                             plan.isCompleted 
-                              ? "bg-slate-50 border-slate-100 text-slate-400 line-through" 
+                              ? "bg-slate-50 border-slate-100 text-slate-400 opacity-80" 
                               : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-sm hover:-translate-y-0.5"
                           )}
                         >
-                          <div className={cn("w-2 h-2 rounded-full flex-shrink-0 shadow-sm", material.color, plan.isCompleted && "opacity-40")} />
-                          <span className="font-bold truncate leading-tight">{plan.planText}</span>
+                          <div className="flex items-center gap-1.5 w-full">
+                            <div className={cn("w-2 h-2 rounded-full flex-shrink-0 shadow-sm", material.color, plan.isCompleted && "opacity-40")} />
+                            <span className={cn("font-medium text-[9px] truncate", plan.isCompleted ? "text-slate-400" : "text-slate-500")}>
+                              {material.name}
+                            </span>
+                          </div>
+                          <span className={cn("font-bold truncate leading-tight w-full pl-3.5", plan.isCompleted && "line-through text-slate-400")}>
+                            {plan.planText}
+                          </span>
                         </div>
                       );
                     })}
