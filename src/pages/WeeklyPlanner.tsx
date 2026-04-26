@@ -393,10 +393,10 @@ export default function WeeklyPlanner() {
 
   return (
     <div className="h-full flex flex-col bg-slate-50/30">
-      <header className="flex flex-col md:flex-row md:items-center justify-between px-6 lg:px-10 py-8 bg-white border-b border-slate-200">
+      <header className="flex flex-col md:flex-row md:items-center justify-between px-6 lg:px-10 py-5 bg-white border-b border-slate-200 flex-shrink-0">
         <div className="mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">週間プランナー</h1>
-          <p className="text-slate-500 mt-2 font-medium">日々の学習量を柔軟に割り当てます。</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">週間プランナー</h1>
+          <p className="text-slate-500 mt-1 font-medium text-sm">日々の学習量を柔軟に割り当てます。</p>
         </div>
         <div className="flex items-center gap-4 bg-slate-100 p-1.5 rounded-2xl">
           <button onClick={prevWeek} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all">
@@ -411,10 +411,10 @@ export default function WeeklyPlanner() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-x-auto p-4 lg:p-10 min-h-0 flex flex-col">
+      <div className="flex-1 overflow-x-auto p-4 lg:p-6 min-h-0 flex flex-col">
         {/* Current Week Goals Section */}
         {currentWeekGoals.length > 0 && (
-          <section className="mb-6 flex-shrink-0">
+          <section className="mb-4 flex-shrink-0">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
               <h2 className="text-xs font-bold text-slate-600 uppercase tracking-widest">今週の目標 (月間計画より)</h2>
@@ -437,8 +437,8 @@ export default function WeeklyPlanner() {
 
         {/* Overdue Plans Section */}
         {overduePlans.length > 0 && (
-          <section className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500 flex-shrink-0">
-            <div className="flex items-center gap-2 mb-4">
+          <section className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
               <h2 className="text-sm font-bold text-rose-600 uppercase tracking-widest">最重要: 期限切れの学習予定</h2>
             </div>
