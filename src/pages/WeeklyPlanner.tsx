@@ -16,30 +16,46 @@ interface StudyPlanItemProps {
 const StudyPlanItem: React.FC<StudyPlanItemProps> = ({ plan, material, updateStudyPlan, deleteStudyPlan }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(plan.planText);
+  const [editDate, setEditDate] = useState(plan.date);
 
   const handleUpdate = () => {
-    if (!editText.trim()) return;
-    updateStudyPlan(plan.id, { planText: editText.trim() });
+    if (!editText.trim() || !editDate) return;
+    updateStudyPlan(plan.id, { 
+      planText: editText.trim(),
+      date: editDate 
+    });
     setIsEditing(false);
   };
 
   if (isEditing) {
     return (
-      <div className="p-2 bg-white border-2 border-slate-900 rounded-md shadow-md space-y-2">
-        <input
-          autoFocus
-          type="text"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleUpdate(); if (e.key === 'Escape') setIsEditing(false); }}
-          className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
-        />
+      <div className="p-2 bg-white border-2 border-slate-900 rounded-md shadow-md space-y-2 z-10 relative">
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">内容</label>
+          <input
+            autoFocus
+            type="text"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleUpdate(); if (e.key === 'Escape') setIsEditing(false); }}
+            className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+          />
+        </div>
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">日付</label>
+          <input
+            type="date"
+            value={editDate}
+            onChange={(e) => setEditDate(e.target.value)}
+            className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+          />
+        </div>
         <div className="flex justify-end gap-1">
-          <button onClick={() => setIsEditing(false)} className="p-1 text-slate-400 hover:text-slate-600">
-            <X className="w-3 h-3" />
+          <button onClick={() => setIsEditing(false)} className="p-1 px-2 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors">
+            キャンセル
           </button>
-          <button onClick={handleUpdate} className="p-1 text-slate-900 hover:text-slate-700">
-            <Plus className="w-3 h-3" />
+          <button onClick={handleUpdate} className="p-1 px-2 text-[10px] font-bold text-white bg-slate-900 rounded hover:bg-slate-800 transition-colors flex items-center gap-1">
+            <Plus className="w-3 h-3" /> 保存
           </button>
         </div>
       </div>
@@ -395,10 +411,10 @@ export default function WeeklyPlanner() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-x-auto p-4 lg:p-10">
+      <div className="flex-1 overflow-x-auto p-4 lg:p-10 min-h-0 flex flex-col">
         {/* Current Week Goals Section */}
         {currentWeekGoals.length > 0 && (
-          <section className="mb-6">
+          <section className="mb-6 flex-shrink-0">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
               <h2 className="text-xs font-bold text-slate-600 uppercase tracking-widest">今週の目標 (月間計画より)</h2>
@@ -421,7 +437,7 @@ export default function WeeklyPlanner() {
 
         {/* Overdue Plans Section */}
         {overduePlans.length > 0 && (
-          <section className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+          <section className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500 flex-shrink-0">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
               <h2 className="text-sm font-bold text-rose-600 uppercase tracking-widest">最重要: 期限切れの学習予定</h2>
@@ -452,7 +468,7 @@ export default function WeeklyPlanner() {
           </section>
         )}
 
-        <div className="flex h-full min-w-[1200px] gap-4">
+        <div className="flex-1 min-h-0 flex min-w-[1200px] gap-4 pb-4">
           {days.map(day => (
             <DayColumn 
               key={day.toISOString()} 
