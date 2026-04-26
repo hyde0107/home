@@ -393,41 +393,41 @@ export default function WeeklyPlanner() {
 
   return (
     <div className="h-full flex flex-col bg-slate-50/30">
-      <header className="flex flex-col lg:flex-row lg:items-center justify-between px-8 lg:px-12 py-8 bg-white border-b border-slate-200 flex-shrink-0">
-        <div className="mb-6 lg:mb-0">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">週間プランナー</h1>
-          <p className="text-slate-500 mt-1.5 font-medium text-base">日々の学習量を柔軟に割り当てます。</p>
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between px-6 lg:px-10 py-5 bg-white border-b border-slate-200/60 flex-shrink-0">
+        <div className="mb-4 lg:mb-0">
+          <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">Planner</h1>
+          <p className="text-slate-400 mt-1 font-black text-[9px] uppercase tracking-[0.2em] opacity-40">Weekly Roadmap</p>
         </div>
-        <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-2xl self-start lg:self-auto">
-          <button onClick={prevWeek} className="p-2.5 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronLeft className="w-6 h-6 text-slate-600" />
+        <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl self-start lg:self-auto border border-slate-100">
+          <button onClick={prevWeek} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <h2 className="text-lg font-bold w-72 text-center text-slate-900">
-            {format(weekStart, 'yyyy年 M月 d日', { locale: ja })} - 
+          <h2 className="text-xs font-black w-56 text-center text-slate-600 tracking-tight">
+            {format(weekStart, 'yyyy. MM. dd', { locale: ja })} - 
           </h2>
-          <button onClick={nextWeek} className="p-2.5 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronRight className="w-6 h-6 text-slate-600" />
+          <button onClick={nextWeek} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </header>
 
-      <div className="flex-1 overflow-x-auto p-6 lg:p-8 min-h-0 flex flex-col">
-        {/* Current Week Goals Section */}
+      <div className="flex-1 overflow-x-auto p-4 lg:p-6 min-h-0 flex flex-col">
+        {/* Goals Section - Sleek pills */}
         {currentWeekGoals.length > 0 && (
-          <section className="mb-6 flex-shrink-0">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-2 h-2 rounded-full bg-indigo-500" />
-              <h2 className="text-sm font-bold text-slate-600 uppercase tracking-widest">今週の目標</h2>
+          <section className="mb-5 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              <h2 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">Goals</h2>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {currentWeekGoals.map(goal => {
                 const material = materials.find(m => m.id === goal.materialId);
                 if (!material) return null;
                 return (
-                  <div key={goal.id} className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-2.5 shadow-sm text-sm">
-                    <div className={cn("w-2.5 h-2.5 rounded-full", material.color)} />
+                  <div key={goal.id} className="flex items-center gap-2 bg-white border border-slate-100 rounded-lg px-3 py-1.5 shadow-sm text-[11px] hover:border-indigo-100 transition-colors">
+                    <div className={cn("w-1.5 h-1.5 rounded-full", material.color)} />
                     <span className="font-bold text-slate-700">{material.name}:</span>
-                    <span className="text-slate-600 font-medium">{goal.goal}</span>
+                    <span className="text-slate-400 font-medium">{goal.goal}</span>
                   </div>
                 );
               })}
@@ -435,33 +435,33 @@ export default function WeeklyPlanner() {
           </section>
         )}
 
-        {/* Overdue Plans Section */}
+        {/* Overdue - High visual priority but compact */}
         {overduePlans.length > 0 && (
-          <section className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500 flex-shrink-0">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-              <h2 className="text-base font-bold text-rose-600 uppercase tracking-widest">最重要: 期限切れの学習予定</h2>
+          <section className="mb-6 animate-in fade-in slide-in-from-top-2 duration-500 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <h2 className="text-[9px] font-black text-rose-500 uppercase tracking-[0.2em]">Overdue</h2>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               {overduePlans.map(plan => {
                 const material = materials.find(m => m.id === plan.materialId) || {
                   id: 'none',
-                  name: '指定なし',
-                  color: 'bg-slate-300',
+                  name: 'Material',
+                  color: 'bg-slate-200',
                   status: 'in-progress'
                 } as Material;
                 return (
-                  <div key={plan.id} className="w-full md:w-[calc(33.333%-12px)] lg:w-[calc(25%-12px)] min-w-[280px]">
-                    <div className="bg-rose-50/50 border border-rose-100 rounded-2xl overflow-hidden shadow-sm">
+                  <div key={plan.id} className="w-full md:w-[calc(33.333%-12px)] lg:w-[calc(25%-12px)] min-w-[240px]">
+                    <div className="bg-white border border-rose-100 rounded-xl overflow-hidden shadow-sm hover:border-rose-200 transition-colors">
                       <StudyPlanItem 
                         plan={plan} 
                         material={material} 
                         updateStudyPlan={updateStudyPlan} 
                         deleteStudyPlan={deleteStudyPlan} 
                       />
-                      <div className="pb-3 px-3 text-[11px] font-bold text-rose-500 uppercase tracking-tight flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        期限切れ: {format(parseISO(plan.date), 'M/d')}
+                      <div className="pb-2 px-2.5 text-[9px] font-black text-rose-400 uppercase tracking-tight flex items-center gap-1 border-t border-rose-50 pt-2">
+                        <AlertCircle className="w-2.5 h-2.5" />
+                        Missed: {format(parseISO(plan.date), 'M/d')}
                       </div>
                     </div>
                   </div>
@@ -471,7 +471,7 @@ export default function WeeklyPlanner() {
           </section>
         )}
 
-        <div className="flex-1 min-h-0 flex min-w-[1400px] gap-6 pb-6">
+        <div className="flex-1 min-h-0 flex min-w-[1200px] gap-4 pb-4">
           {days.map(day => (
             <DayColumn 
               key={day.toISOString()} 

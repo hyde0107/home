@@ -129,40 +129,40 @@ export default function MonthlyPlanner() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-auto p-4 lg:p-10">
-        <div className="mb-4 lg:hidden flex items-center gap-2 text-slate-400">
-          <Zap className="w-4 h-4" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">横にスクロールして確認できます</span>
+      <div className="flex-1 overflow-auto p-4 lg:p-6">
+        <div className="mb-4 lg:hidden flex items-center gap-2 text-slate-300">
+          <Zap className="w-3 h-3" />
+          <span className="text-[9px] font-black uppercase tracking-widest leading-none">Scroll to roadmap</span>
         </div>
-        <div className="min-w-[800px] bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
-          <div className="flex border-b border-slate-200">
-            <div className="w-64 flex-shrink-0 bg-slate-50/50 p-4 flex items-end border-r border-slate-200">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">教材 / 週</span>
+        <div className="min-w-[800px] bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
+          <div className="flex border-b border-slate-200/60">
+            <div className="w-56 flex-shrink-0 bg-slate-50/30 p-3.5 flex items-end border-r border-slate-100">
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] leading-none">Resource / Week</span>
             </div>
             {weeks.map((week, i) => (
-              <div key={i} className="flex-1 bg-slate-50/50 p-4 text-center border-r border-slate-200 last:border-r-0">
-                <span className="text-sm font-bold text-slate-600 tracking-tight">{getWeekLabel(week)}</span>
+              <div key={i} className="flex-1 bg-slate-50/30 p-3.5 text-center border-r border-slate-100 last:border-r-0">
+                <span className="text-[11px] font-black text-slate-500 tracking-tight">{getWeekLabel(week)}</span>
               </div>
             ))}
           </div>
 
-          <div className="flex border-b border-slate-200">
-            <div className="w-64 flex-shrink-0 p-4 flex items-center gap-2 bg-slate-50/30 border-r border-slate-200">
-              <AlertCircle className="w-4 h-4 text-slate-400" />
-              <span className="text-sm font-bold text-slate-500 uppercase tracking-wide">締め切り / 予定</span>
+          <div className="flex border-b border-slate-200/60">
+            <div className="w-56 flex-shrink-0 p-3.5 flex items-center gap-2 bg-slate-50/10 border-r border-slate-100">
+              <AlertCircle className="w-3.5 h-3.5 text-slate-200" />
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none">Milestones</span>
             </div>
             {weeks.map((week, i) => (
-              <div key={i} className="flex-1 border-r border-slate-200 last:border-r-0">
+              <div key={i} className="flex-1 border-r border-slate-100 last:border-r-0">
                 <TaskCell weekStart={week} tasks={tasks} />
               </div>
             ))}
           </div>
 
           {displayMaterials.map(material => (
-            <div key={material.id} className="flex border-b border-slate-100 last:border-b-0 group">
-              <div className="w-64 flex-shrink-0 p-4 flex items-center gap-3 bg-white border-r border-slate-200 group-hover:bg-slate-50 transition-colors">
-                <div className={cn("w-3.5 h-3.5 rounded-full shadow-sm", material.color)} />
-                <span className="text-base font-bold text-slate-700 truncate" title={material.name}>
+            <div key={material.id} className="flex border-b border-slate-50 last:border-b-0 group">
+              <div className="w-56 flex-shrink-0 p-3.5 flex items-center gap-2.5 bg-white border-r border-slate-100 group-hover:bg-slate-50 transition-colors">
+                <div className={cn("w-2.5 h-2.5 rounded-full shadow-sm", material.color)} />
+                <span className="text-[13px] font-bold text-slate-700 truncate tracking-tight" title={material.name}>
                   {material.name}
                 </span>
               </div>

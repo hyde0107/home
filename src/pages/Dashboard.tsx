@@ -193,263 +193,152 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6 lg:p-10 max-w-6xl mx-auto w-full space-y-8">
-      {/* Header & Bento Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Greeting & Date */}
-        <div className="md:col-span-2 flex flex-col justify-center">
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
+    <div className="p-4 lg:p-6 max-w-5xl mx-auto w-full space-y-5">
+      {/* Header & Quick stats */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="pl-1">
+          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight">
             {today.getHours() < 12 ? 'おはようございます' : today.getHours() < 18 ? 'こんにちは' : 'こんばんは'}
           </h1>
-          <p className="text-slate-500 mt-2 text-lg font-medium">
-            {format(today, 'yyyy年 M月 d日 (E)', { locale: ja })}
+          <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1.5 opacity-60">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            {format(today, 'yyyy / MM / dd (E)', { locale: ja })}
           </p>
         </div>
-
-        {/* Streak Card */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center gap-5">
-          <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100">
-            <Flame className="w-8 h-8 text-orange-500 fill-orange-500" />
+        
+        <div className="bg-white border border-slate-200/60 rounded-xl p-2 shadow-sm flex items-center gap-2.5 pr-4 transition-all hover:border-orange-200 group">
+          <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center border border-orange-100 group-hover:bg-orange-100 transition-colors">
+            <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">連続学習記録</p>
-            <p className="text-3xl font-black text-slate-900 leading-none">{streak} <span className="text-sm font-bold text-slate-500">日</span></p>
+            <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Streak</p>
+            <p className="text-base font-black text-slate-900 leading-none">{streak} <span className="text-[9px] text-slate-300 font-bold tracking-tight">days</span></p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
         {/* Progress Card */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center justify-between">
-          <div className="space-y-1">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-2">今日の進捗</p>
-            <p className="text-2xl font-bold text-slate-900 leading-none">
-              {completedToday} / {totalToday} <span className="text-base font-medium text-slate-500 ml-1">完了</span>
-            </p>
-            <p className="text-[11px] text-slate-400 font-medium">
-              {totalToday === 0 ? '予定はありません' : progressPercent === 100 ? '完璧です！' : 'あと少し！'}
+        <div className="bg-white border border-slate-200/60 rounded-xl p-3 shadow-sm flex items-center justify-between hover:border-indigo-100 transition-colors">
+          <div>
+            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none mb-2">Today</p>
+            <p className="text-base font-black text-slate-900 leading-none">
+              {completedToday} <span className="text-slate-200 text-xs">/ {totalToday}</span>
             </p>
           </div>
-          <CircularProgress percent={progressPercent} size={90} strokeWidth={10} />
+          <CircularProgress percent={progressPercent} size={42} strokeWidth={8} />
         </div>
 
-        {/* Study Tip Card */}
-        <div className="md:col-span-2 bg-indigo-600 rounded-3xl p-6 text-white shadow-lg shadow-indigo-100 flex items-center gap-6 relative overflow-hidden">
-          <div className="absolute -right-4 -bottom-4 opacity-10">
-            <Lightbulb className="w-32 h-32" />
+        {/* Tip Card - Subtle and sleek */}
+        <div className="md:col-span-2 bg-slate-900 rounded-xl p-3 text-white flex items-center gap-3 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-2 opacity-5 scale-125 transition-transform group-hover:scale-150 duration-500">
+            <Lightbulb className="w-12 h-12" />
           </div>
-          <div className="w-14 h-14 bg-white/20 rounded-2xl flex-shrink-0 flex items-center justify-center backdrop-blur-sm">
-            <Zap className="w-8 h-8 text-white" />
+          <div className="w-8 h-8 bg-white/10 rounded-lg flex-shrink-0 flex items-center justify-center border border-white/5 backdrop-blur-sm">
+            <Zap className="w-4 h-4 text-indigo-400 fill-indigo-400" />
           </div>
-          <div className="relative z-10 w-full">
-            <h3 className="text-xs font-bold text-indigo-200 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-              <Lightbulb className="w-3.5 h-3.5" />
-              学習のヒント
-            </h3>
-            <p className="text-sm md:text-base font-medium leading-relaxed">
-              {randomTip}
+          <div className="relative z-10">
+            <p className="text-[10px] font-medium text-slate-400 italic leading-snug line-clamp-1 max-w-[95%]">
+              "{randomTip}"
             </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        {/* Left Column: Tasks */}
-        <div className="space-y-8">
-          <section className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                <Target className="w-6 h-6 text-indigo-500" />
-                今日のタスク
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+        {/* Left: Tasks */}
+        <div className="space-y-5">
+          <section className="bg-white border border-slate-200/60 rounded-xl p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                <Target className="w-3.5 h-3.5 text-indigo-500" />
+                Tasks
               </h2>
-              {combinedTasks.length > 0 && (
-                <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
-                  {combinedTasks.filter(t => t.status === 'completed').length} / {combinedTasks.length}
-                </span>
-              )}
             </div>
+            
             {combinedTasks.length > 0 ? (
-              <div className="space-y-3">
-                {combinedTasks.map(task => {
-                  const isDone = task.status === 'completed';
-                  const isOverdue = isBefore(parseISO(task.deadline), startOfDay(today));
-                  return (
-                    <div key={task.id} className={cn(
-                      "flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300",
-                      isDone 
-                        ? "border-slate-100 bg-slate-50/50 opacity-60" 
-                        : isOverdue 
-                          ? "border-rose-200 bg-rose-50/30 hover:border-rose-300 hover:bg-white hover:shadow-xl hover:shadow-rose-100/20"
-                          : "border-slate-100 bg-slate-50/30 hover:border-indigo-200 hover:bg-white hover:shadow-xl hover:shadow-indigo-100/20"
+              <div className="space-y-1">
+                {combinedTasks.map(task => (
+                  <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg border border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all group">
+                    <button onClick={() => toggleTaskStatus(task)} className="flex-shrink-0">
+                      {task.status === 'completed' ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      ) : (
+                        <Circle className="w-4 h-4 text-slate-200 group-hover:text-indigo-400 transition-colors" />
+                      )}
+                    </button>
+                    <p className={cn(
+                      "text-xs font-bold truncate tracking-tight transition-all",
+                      task.status === 'completed' ? "text-slate-300 line-through font-medium" : "text-slate-600 group-hover:text-slate-900"
                     )}>
-                      <button onClick={() => toggleTaskStatus(task)} className="flex-shrink-0">
-                        {isDone ? (
-                          <CheckCircle2 className="w-7 h-7 text-emerald-500" />
-                        ) : (
-                          <Circle className={cn("w-7 h-7 transition-colors", isOverdue ? "text-rose-300 hover:text-rose-400" : "text-slate-300 hover:text-indigo-400")} />
-                        )}
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          {(task.isPriority || isOverdue) && !isDone && <AlertCircle className={cn("w-4 h-4 flex-shrink-0", isOverdue ? "text-rose-600" : "text-rose-500")} />}
-                          <p className={cn(
-                            "text-base font-bold truncate",
-                            isDone ? "text-slate-400 line-through" : "text-slate-700"
-                          )}>
-                            {task.title}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                      {task.title}
+                    </p>
+                  </div>
+                ))}
               </div>
             ) : (
-              <div className="py-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                <p className="text-sm text-slate-400 font-bold">今日のタスクはありません</p>
+              <div className="py-6 text-center">
+                <p className="text-[9px] font-black text-slate-200 uppercase tracking-widest">No plans yet</p>
               </div>
             )}
           </section>
-
-          {/* Tomorrow's Preview Section */}
-          {tomorrowTasks.length > 0 && (
-            <section className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                  <Zap className="w-6 h-6 text-indigo-500" />
-                  明日のタスク
-                </h2>
-                <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-widest">
-                  {format(tomorrow, 'M/d (E)', { locale: ja })}
-                </span>
-              </div>
-              
-              <div className="space-y-3">
-                {tomorrowTasks.map(task => {
-                  const isDone = task.status === 'completed';
-                  return (
-                    <div key={task.id} className={cn(
-                      "flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300",
-                      isDone 
-                        ? "border-slate-100 bg-slate-50/50 opacity-60" 
-                        : "border-slate-100 bg-slate-50/30 hover:border-indigo-200 hover:bg-white hover:shadow-xl hover:shadow-indigo-100/20"
-                    )}>
-                      <button onClick={() => toggleTaskStatus(task)} className="flex-shrink-0">
-                        {isDone ? (
-                          <CheckCircle2 className="w-7 h-7 text-emerald-500" />
-                        ) : (
-                          <Circle className="w-7 h-7 text-slate-300 hover:text-indigo-400 transition-colors" />
-                        )}
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        <p className={cn(
-                          "text-base font-bold truncate",
-                          isDone ? "text-slate-400 line-through" : "text-slate-700"
-                        )}>
-                          {task.title}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
         </div>
 
-        {/* Right Column: Study Plans */}
-        <div className="space-y-8">
-          <section className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                <BookOpen className="w-6 h-6 text-indigo-500" />
-                今日の学習予定
-              </h2>
-              {combinedPlans.length > 0 && (
-                <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">
-                  {combinedPlans.filter(p => p.isCompleted).length} / {combinedPlans.length}
-                </span>
-              )}
-            </div>
-            {combinedPlans.length > 0 ? (
-              <div className="space-y-3">
-                {combinedPlans.map(plan => {
-                  const material = materials.find(m => m.id === plan.materialId) || {
-                    id: 'none',
-                    name: '指定なし',
-                    color: 'bg-slate-300',
-                    status: 'in-progress'
-                  } as Material;
-                  const isDone = plan.isCompleted;
-                  const isOverdue = isBefore(parseISO(plan.date), startOfDay(today));
-
-                  return (
-                    <div key={plan.id} className={cn(
-                      "flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300",
-                      isDone 
-                        ? "border-slate-100 bg-slate-50/50 opacity-60" 
-                        : isOverdue
-                          ? "border-rose-200 bg-rose-50/30 hover:border-rose-300 hover:bg-white hover:shadow-xl hover:shadow-rose-100/20"
-                          : "border-slate-100 bg-slate-50/30 hover:border-indigo-200 hover:bg-white hover:shadow-xl hover:shadow-indigo-100/20"
-                    )}>
+        {/* Right Column: Plans & Diary */}
+        <div className="space-y-5">
+          <section className="bg-white border border-slate-200/60 rounded-xl p-4 shadow-sm">
+            <h2 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
+              Schedule
+            </h2>
+            <div className="space-y-1">
+              {combinedPlans.map(plan => {
+                const material = materials.find(m => m.id === plan.materialId);
+                return (
+                  <div key={plan.id} className="flex flex-col p-2 rounded-lg border border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all group">
+                    <div className="flex items-center gap-3">
                       <button onClick={() => togglePlanStatus(plan)} className="flex-shrink-0">
-                        {isDone ? (
-                          <CheckCircle2 className="w-7 h-7 text-emerald-500" />
+                        {plan.isCompleted ? (
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         ) : (
-                          <Circle className={cn("w-7 h-7 transition-colors", isOverdue ? "text-rose-300 hover:text-rose-400" : "text-slate-300 hover:text-indigo-400")} />
+                          <Circle className="w-4 h-4 text-slate-200 group-hover:text-indigo-400 transition-colors" />
                         )}
                       </button>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className={cn(
-                            "text-base font-bold truncate",
-                            isDone ? "text-slate-400 line-through" : "text-slate-700"
-                          )}>
-                            {plan.planText}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          <div className={cn("w-3 h-3 rounded-full shadow-sm", material.color)} />
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{material.name}</span>
-                        </div>
-                      </div>
+                      <p className={cn("text-xs font-bold truncate tracking-tight", plan.isCompleted ? "text-slate-300 line-through font-medium" : "text-slate-600 group-hover:text-slate-900")}>
+                        {plan.planText}
+                      </p>
                     </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="py-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                <p className="text-sm text-slate-400 font-bold">今日の学習予定はありません</p>
-              </div>
-            )}
+                    {material && (
+                      <div className="flex items-center gap-1.5 mt-1 ml-7 opacity-80">
+                        <div className={cn("w-1.5 h-1.5 rounded-full shadow-sm", material.color)} />
+                        <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">{material.name}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </section>
 
-          {/* Quick Diary */}
-          <section className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                <PenLine className="w-6 h-6 text-indigo-500" />
-                振り返り
+          <section className="bg-white border border-slate-900/10 rounded-xl p-4 shadow-lg shadow-slate-100 relative">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] flex items-center gap-2">
+                <PenLine className="w-3 h-3" />
+                Notes
               </h2>
               <button 
                 onClick={handleSaveDiary}
                 disabled={isSavingDiary || !diaryContent.trim()}
-                className={cn(
-                  "flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all",
-                  isSavingDiary || !diaryContent.trim()
-                    ? "bg-slate-50 text-slate-300 cursor-not-allowed"
-                    : "bg-indigo-50 text-indigo-600 hover:bg-indigo-100"
-                )}
+                className="text-[9px] font-black uppercase text-indigo-600 hover:text-indigo-700 disabled:opacity-20 transition-all"
               >
-                <Save className="w-4.5 h-4.5" />
-                保存
+                {isSavingDiary ? 'Syncing...' : 'Quick Save'}
               </button>
             </div>
             <textarea
               value={diaryContent}
               onChange={(e) => setDiaryContent(e.target.value)}
-              placeholder="今日学んだことや、明日の目標をメモしましょう..."
-              className="w-full h-40 p-6 bg-slate-50 border border-slate-100 rounded-2xl text-base text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 transition-all resize-none font-medium leading-relaxed"
+              placeholder="What did you achieve today?"
+              className="w-full h-20 bg-slate-50/50 border-none rounded-lg p-2.5 text-[12px] text-slate-600 placeholder:text-slate-200 focus:ring-0 resize-none font-medium"
             />
           </section>
         </div>
