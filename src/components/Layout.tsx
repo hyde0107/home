@@ -39,7 +39,7 @@ export default function Layout() {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden">
+    <div className="flex h-[100dvh] bg-slate-50 text-slate-900 font-sans overflow-hidden">
       {/* Sidebar - Only show if logged in and configured */}
       {isConfigured && user && (
         <>
@@ -53,66 +53,67 @@ export default function Layout() {
 
           {/* Sidebar */}
           <aside className={cn(
-            "fixed lg:relative inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:transform-none lg:translate-x-0 shadow-xl lg:shadow-none",
+            "fixed lg:relative inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:transform-none lg:translate-x-0 shadow-xl lg:shadow-none",
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}>
-            <div className="h-14 flex items-center justify-between px-6 border-b border-slate-100 flex-shrink-0">
+            <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
                   <FileCode2 className="w-5 h-5 text-white" />
                 </div>
-                <h1 className="text-lg font-bold tracking-tight text-slate-900">StudyFlow</h1>
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 leading-none">StudyFlow</h1>
               </div>
               <button onClick={closeSidebar} className="lg:hidden p-2 -mr-2 text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
             
-            <div className="p-3 border-b border-slate-100 bg-slate-50/50 flex-shrink-0">
-              <div className="flex items-center gap-2">
+            <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex-shrink-0">
+              <div className="flex items-center gap-3">
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                  <img src={user.photoURL} alt="Profile" className="w-9 h-9 rounded-full border-2 border-white shadow-sm" />
                 ) : (
-                  <div className="w-8 h-8 rounded-full border-2 border-white shadow-sm bg-slate-200 flex items-center justify-center">
-                    <span className="text-[9px] font-bold text-slate-400">{user.displayName?.charAt(0)}</span>
+                  <div className="w-9 h-9 rounded-full border-2 border-white shadow-sm bg-slate-200 flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-slate-400">{user.displayName?.charAt(0)}</span>
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold text-slate-900 truncate tracking-tight">{user.displayName}</p>
-                  <p className="text-[8px] text-slate-400 truncate uppercase tracking-widest font-black leading-none">{user.email}</p>
+                  <p className="text-sm font-bold text-slate-900 truncate tracking-tight">{user.displayName}</p>
+                  <p className="text-[9px] text-slate-400 truncate uppercase tracking-widest font-black leading-none mt-0.5">{user.email}</p>
                 </div>
               </div>
             </div>
 
-            <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto custom-scrollbar">
+            <nav className="flex-1 py-4 space-y-1 overflow-y-auto custom-scrollbar">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
                 const Icon = item.icon;
                 return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={closeSidebar}
-                    className={cn(
-                      "flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all duration-200 group",
-                      isActive 
-                        ? "bg-slate-900 text-white shadow-md shadow-slate-200" 
-                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
-                    )}
-                  >
-                    <Icon className={cn("w-3.5 h-3.5 transition-colors", isActive ? "text-slate-300" : "text-slate-400 group-hover:text-slate-600")} />
-                    {item.name}
-                  </Link>
+                  <div className="px-3" key={item.path}>
+                    <Link
+                      to={item.path}
+                      onClick={closeSidebar}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 group",
+                        isActive 
+                          ? "bg-slate-900 text-white shadow-lg shadow-slate-200" 
+                          : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                      )}
+                    >
+                      <Icon className={cn("w-4.5 h-4.5 transition-colors", isActive ? "text-slate-300" : "text-slate-400 group-hover:text-slate-600")} />
+                      {item.name}
+                    </Link>
+                  </div>
                 );
               })}
             </nav>
 
-            <div className="p-2 border-t border-slate-100 flex-shrink-0">
+            <div className="p-4 border-t border-slate-100 flex-shrink-0">
               <button 
                 onClick={handleLogout}
-                className="flex items-center gap-2 w-full px-3 py-1.5 text-[11px] font-bold text-rose-600 hover:bg-rose-50 rounded-lg transition-all duration-200"
+                className="flex items-center gap-2 w-full px-4 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all duration-200"
               >
-                <LogOut className="w-3.5 h-3.5" />
+                <LogOut className="w-4 h-4" />
                 ログアウト
               </button>
             </div>
@@ -136,7 +137,7 @@ export default function Layout() {
           </header>
         )}
 
-        <main className="flex-1 overflow-hidden bg-slate-50/50 flex flex-col">
+        <main className="flex-1 overflow-y-auto bg-slate-50/50 flex flex-col custom-scrollbar">
           {!isConfigured ? (
             <div className="fixed inset-0 flex items-center justify-center bg-slate-50 z-[100]">
               <div className="text-center animate-pulse">
