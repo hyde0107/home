@@ -36,32 +36,32 @@ export default function CalendarView() {
 
   return (
     <div className="h-full flex flex-col bg-slate-50/30">
-      <header className="flex flex-col md:flex-row md:items-center justify-between px-6 lg:px-10 py-8 bg-white border-b border-slate-200">
-        <div className="mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">カレンダー</h1>
-          <p className="text-slate-500 mt-2 font-medium">月間のタスクと学習予定をカレンダー形式で確認します。</p>
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between px-6 lg:px-10 py-5 bg-white border-b border-slate-200/60 flex-shrink-0">
+        <div className="mb-4 lg:mb-0">
+          <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">Calendar</h1>
+          <p className="text-slate-400 mt-1 font-black text-[9px] uppercase tracking-[0.2em] opacity-40">Monthly view</p>
         </div>
-        <div className="flex items-center gap-4 bg-slate-100 p-1.5 rounded-2xl">
-          <button onClick={prevMonth} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronLeft className="w-5 h-5 text-slate-600" />
+        <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl self-start lg:self-auto border border-slate-100">
+          <button onClick={prevMonth} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <h2 className="text-base font-bold w-40 text-center text-slate-900">
-            {format(currentDate, 'yyyy年 M月', { locale: ja })}
+          <h2 className="text-xs font-black w-32 text-center text-slate-600 tracking-tight">
+            {format(currentDate, 'yyyy. MM')}
           </h2>
-          <button onClick={nextMonth} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronRight className="w-5 h-5 text-slate-600" />
+          <button onClick={nextMonth} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </header>
 
       <div className="flex-1 overflow-auto p-4 lg:p-10">
-        <div className="min-w-[900px] bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="min-w-[900px] bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden">
           {/* Weekday Headers */}
-          <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50/50">
+          <div className="grid grid-cols-7 border-b border-slate-200/60 bg-slate-50/50">
             {weekDays.map((day, i) => (
-              <div key={i} className="py-3 text-center border-r border-slate-200 last:border-r-0">
+              <div key={i} className="py-2.5 text-center border-r border-slate-200/60 last:border-r-0">
                 <span className={cn(
-                  "text-[10px] font-bold uppercase tracking-widest",
+                  "text-[9px] font-black uppercase tracking-widest",
                   i === 5 ? "text-blue-500" : i === 6 ? "text-rose-500" : "text-slate-400"
                 )}>
                   {day}
@@ -88,14 +88,14 @@ export default function CalendarView() {
                 <div 
                   key={day.toISOString()} 
                   className={cn(
-                    "border-r border-b border-slate-100 p-3 flex flex-col gap-2 transition-colors last:border-r-0",
+                    "border-r border-b border-slate-100 p-2 lg:p-3 flex flex-col gap-2 transition-colors last:border-r-0",
                     isCurrentMonth ? "bg-white" : "bg-slate-50/30",
-                    isTodayDate && "bg-blue-50/20"
+                    isTodayDate && "bg-slate-50"
                   )}
                 >
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-0.5">
                     <span className={cn(
-                      "text-xs font-bold w-7 h-7 flex items-center justify-center rounded-lg transition-all",
+                      "text-[10px] lg:text-xs font-black w-6 h-6 lg:w-7 lg:h-7 flex items-center justify-center rounded-lg transition-all",
                       isTodayDate 
                         ? "bg-slate-900 text-white shadow-md shadow-slate-200" 
                         : !isCurrentMonth ? "text-slate-300" : "text-slate-500"
@@ -111,18 +111,18 @@ export default function CalendarView() {
                         key={task.id}
                         onClick={(e) => toggleTaskStatus(e, task.id, task.status)}
                         className={cn(
-                          "text-[10px] px-2 py-1.5 rounded-lg border cursor-pointer flex items-start gap-1.5 transition-all duration-200",
+                          "text-[9px] px-1.5 py-1 rounded-md border cursor-pointer flex items-start gap-1 transition-all duration-200",
                           task.status === 'completed' 
-                            ? "bg-slate-50 border-slate-100 text-slate-400 line-through" 
+                            ? "bg-transparent border-transparent opacity-50 line-through text-slate-400" 
                             : task.isPriority 
-                              ? "bg-rose-50 border-rose-100 text-rose-700 hover:shadow-sm hover:-translate-y-0.5" 
-                              : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-sm hover:-translate-y-0.5"
+                              ? "bg-rose-50 border-rose-100 text-rose-700 hover:border-rose-200" 
+                              : "bg-white border-slate-200/60 text-slate-700 hover:border-slate-300 hover:shadow-sm"
                         )}
                       >
                         {task.isPriority && task.status !== 'completed' && (
-                          <AlertCircle className="w-3 h-3 flex-shrink-0 mt-0.5" />
+                          <AlertCircle className="w-2.5 h-2.5 flex-shrink-0 mt-0.5" />
                         )}
-                        <span className="font-bold truncate leading-tight">{task.title}</span>
+                        <span className="font-black uppercase tracking-wide truncate leading-tight">{task.title}</span>
                       </div>
                     ))}
 
@@ -140,19 +140,19 @@ export default function CalendarView() {
                           key={plan.id}
                           onClick={(e) => togglePlanStatus(e, plan.id, plan.isCompleted)}
                           className={cn(
-                            "text-[10px] px-2 py-1.5 rounded-lg border cursor-pointer flex flex-col items-start gap-0.5 transition-all duration-200",
+                            "text-[9px] px-1.5 py-1 rounded-md border cursor-pointer flex flex-col items-start gap-0.5 transition-all duration-200",
                             plan.isCompleted 
-                              ? "bg-slate-50 border-slate-100 text-slate-400 opacity-80" 
-                              : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-sm hover:-translate-y-0.5"
+                              ? "bg-transparent border-transparent opacity-50 line-through text-slate-400" 
+                              : "bg-white border-slate-200/60 text-slate-700 hover:border-slate-300 hover:shadow-sm"
                           )}
                         >
-                          <div className="flex items-center gap-1.5 w-full">
-                            <div className={cn("w-2 h-2 rounded-full flex-shrink-0 shadow-sm", material.color, plan.isCompleted && "opacity-40")} />
-                            <span className={cn("font-medium text-[9px] truncate", plan.isCompleted ? "text-slate-400" : "text-slate-500")}>
+                          <div className="flex items-center gap-1 w-full">
+                            <div className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", material.color, plan.isCompleted && "opacity-40")} />
+                            <span className={cn("font-black tracking-widest uppercase text-[7px] truncate", plan.isCompleted ? "text-slate-400" : "text-slate-400")}>
                               {material.name}
                             </span>
                           </div>
-                          <span className={cn("font-bold truncate leading-tight w-full pl-3.5", plan.isCompleted && "line-through text-slate-400")}>
+                          <span className={cn("font-black uppercase tracking-wide truncate leading-tight w-full pl-2.5", plan.isCompleted && "line-through text-slate-400")}>
                             {plan.planText}
                           </span>
                         </div>

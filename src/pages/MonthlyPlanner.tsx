@@ -31,7 +31,7 @@ const MatrixCell: React.FC<MatrixCellProps> = ({ materialId, weekStart, weeklyGo
 
   return (
     <div 
-      className="min-h-[4rem] border-b border-r border-slate-100 p-2 hover:bg-slate-50 transition-colors relative group"
+      className="min-h-[4rem] border-b border-r border-slate-100 p-2.5 hover:bg-slate-50 transition-colors relative group"
       onClick={() => !isEditing && setIsEditing(true)}
     >
       {isEditing ? (
@@ -41,12 +41,12 @@ const MatrixCell: React.FC<MatrixCellProps> = ({ materialId, weekStart, weeklyGo
           onChange={(e) => setTempGoal(e.target.value)}
           onBlur={handleSave}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSave(); } }}
-          className="w-full h-full min-h-[4rem] text-sm md:text-base text-slate-700 bg-white border border-slate-300 rounded p-1.5 focus:outline-none focus:ring-1 focus:ring-slate-500 resize-none font-medium"
-          placeholder="目標..."
+          className="w-full h-full min-h-[4rem] text-[10px] uppercase font-black tracking-wide text-slate-700 bg-white border border-slate-300 rounded p-1.5 focus:outline-none focus:ring-1 focus:ring-slate-500 resize-none"
+          placeholder="Goal..."
         />
       ) : (
-        <div className="w-full h-full text-xs md:text-sm text-slate-700 break-words whitespace-normal cursor-text font-medium leading-relaxed">
-          {goal?.goal || <span className="text-slate-300">目標を設定...</span>}
+        <div className="w-full h-full text-[10px] text-slate-600 break-words whitespace-normal cursor-text font-black uppercase tracking-wide leading-relaxed">
+          {goal?.goal || <span className="text-slate-300">Add Goal...</span>}
         </div>
       )}
     </div>
@@ -67,11 +67,11 @@ const TaskCell: React.FC<TaskCellProps> = ({ weekStart, tasks }) => {
 
   return (
     <div className="min-h-[4.5rem] border-b border-r border-slate-100 p-2.5 bg-slate-50/50 overflow-y-auto">
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-0">
         {weekTasks.map(task => (
-          <div key={task.id} className="flex items-start gap-1.5 text-[10px] md:text-xs bg-white border border-slate-200 rounded-lg px-2 py-1 shadow-sm">
-            {task.isPriority && <AlertCircle className="w-3 h-3 text-rose-500 flex-shrink-0 mt-0.5" />}
-            <span className={cn("break-words whitespace-normal font-bold", task.status === 'completed' && "line-through text-slate-400")}>
+          <div key={task.id} className="flex items-start gap-1.5 pb-1.5 mb-1.5 border-b border-slate-200/50 last:border-b-0 last:mb-0 last:pb-0">
+            {task.isPriority && <AlertCircle className="w-2.5 h-2.5 text-rose-500 flex-shrink-0 mt-0.5" />}
+            <span className={cn("text-[8px] uppercase tracking-wide font-black break-words whitespace-normal", task.status === 'completed' && "line-through text-slate-300", !task.status && "text-slate-600")}>
               {task.title}
             </span>
           </div>
@@ -111,20 +111,20 @@ export default function MonthlyPlanner() {
 
   return (
     <div className="h-full flex flex-col bg-slate-50/30">
-      <header className="flex flex-col md:flex-row md:items-center justify-between px-6 lg:px-10 py-8 bg-white border-b border-slate-200">
-        <div className="mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">月間ロードマップ</h1>
-          <p className="text-slate-500 mt-2 font-medium">タスクの締め切りを俯瞰し、教材の週間目標を設定します。</p>
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between px-6 lg:px-10 py-5 bg-white border-b border-slate-200/60 flex-shrink-0">
+        <div className="mb-4 lg:mb-0">
+          <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">Roadmap</h1>
+          <p className="text-slate-400 mt-1 font-black text-[9px] uppercase tracking-[0.2em] opacity-40">Monthly Overview</p>
         </div>
-        <div className="flex items-center gap-4 bg-slate-100 p-1.5 rounded-2xl">
-          <button onClick={prevMonth} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronLeft className="w-5 h-5 text-slate-600" />
+        <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl self-start lg:self-auto border border-slate-100">
+          <button onClick={prevMonth} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <h2 className="text-base font-bold w-32 text-center text-slate-900">
-            {format(currentDate, 'yyyy年 M月', { locale: ja })}
+          <h2 className="text-xs font-black w-32 text-center text-slate-600 tracking-tight">
+            {format(currentDate, 'yyyy. MM')}
           </h2>
-          <button onClick={nextMonth} className="p-2 hover:bg-white hover:shadow-sm rounded-xl transition-all">
-            <ChevronRight className="w-5 h-5 text-slate-600" />
+          <button onClick={nextMonth} className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all text-slate-400 hover:text-slate-900">
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </header>
@@ -134,7 +134,7 @@ export default function MonthlyPlanner() {
           <Zap className="w-3 h-3" />
           <span className="text-[9px] font-black uppercase tracking-widest leading-none">Scroll to roadmap</span>
         </div>
-        <div className="min-w-[800px] bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
+        <div className="min-w-[800px] bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden mb-6">
           <div className="flex border-b border-slate-200/60">
             <div className="w-56 flex-shrink-0 bg-slate-50/30 p-3.5 flex items-end border-r border-slate-100">
               <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] leading-none">Resource / Week</span>

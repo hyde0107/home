@@ -4,7 +4,7 @@ import { format, parseISO, isBefore, startOfDay, subDays, isSameDay, addDays } f
 import { ja } from 'date-fns/locale';
 import { CheckCircle2, Circle, AlertCircle, BookOpen, PenLine, Save, Flame, Lightbulb, X, Trophy, Target, Zap } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { Task, StudyPlan, Material, DiaryEntry } from '../types';
+import { Task, StudyPlan, Material } from '../types';
 
 const STUDY_TIPS = [
   "「1ページだけ読む」「計算を1問だけ解く」など、脳が拒否反応を起こさないほど小さな一歩から始めましょう。",
@@ -90,24 +90,22 @@ function CircularProgress({ percent, size = 80, strokeWidth = 8 }: { percent: nu
 }
 
 export default function Dashboard() {
-  const { tasks, materials, studyPlans, diaryEntries, updateTask, updateStudyPlan, saveDiaryEntry } = useData();
+  const { tasks, materials, studyPlans, updateTask, updateStudyPlan } = useData();
   const today = new Date();
   const todayStr = format(today, 'yyyy-MM-dd');
   const [randomTip] = React.useState(() => STUDY_TIPS[Math.floor(Math.random() * STUDY_TIPS.length)]);
 
   // Streak calculation - improved logic
   const streak = React.useMemo(() => {
-    if (studyPlans.length === 0 && diaryEntries.length === 0) return 0;
+    if (studyPlans.length === 0) return 0;
     
     let count = 0;
     let curr = new Date();
     
     const wasActive = (date: Date) => {
       const dStr = format(date, 'yyyy-MM-dd');
-      // A day is active if at least one study plan was completed OR a diary entry was made
-      const hasCompletedPlan = studyPlans.some(p => p.date === dStr && p.isCompleted);
-      const hasDiary = diaryEntries.some(e => e.date === dStr && e.content.trim().length > 0);
-      return hasCompletedPlan || hasDiary;
+      // A day is active if at least one study plan was completed
+      return studyPlans.some(p => p.date === dStr && p.isCompleted);
     };
 
     // If not active today, check if yesterday was active to continue the streak
@@ -122,7 +120,7 @@ export default function Dashboard() {
       if (count > 365) break; 
     }
     return count;
-  }, [studyPlans, diaryEntries]);
+  }, [studyPlans]);
 
   // Filter tasks
   const todayOnlyTasks = tasks.filter(t => t.deadline === todayStr);
@@ -164,15 +162,6 @@ export default function Dashboard() {
   const completedToday = combinedTasks.filter(t => t.status === 'completed').length + combinedPlans.filter(p => p.isCompleted).length;
   const progressPercent = totalToday > 0 ? Math.round((completedToday / totalToday) * 100) : 0;
 
-  // Diary
-  const todayEntry = diaryEntries.find(e => e.date === todayStr);
-  const [diaryContent, setDiaryContent] = React.useState(todayEntry?.content || '');
-  const [isSavingDiary, setIsSavingDiary] = React.useState(false);
-
-  React.useEffect(() => {
-    if (todayEntry) setDiaryContent(todayEntry.content);
-  }, [todayEntry]);
-
   const toggleTaskStatus = (task: Task) => {
     const newStatus = task.status === 'completed' ? 'pending' : 'completed';
     updateTask(task.id, { status: newStatus });
@@ -180,16 +169,6 @@ export default function Dashboard() {
 
   const togglePlanStatus = (plan: StudyPlan) => {
     updateStudyPlan(plan.id, { isCompleted: !plan.isCompleted });
-  };
-
-  const handleSaveDiary = async () => {
-    if (!diaryContent.trim()) return;
-    setIsSavingDiary(true);
-    try {
-      await saveDiaryEntry(todayStr, diaryContent, todayEntry?.mood);
-    } finally {
-      setIsSavingDiary(false);
-    }
   };
 
   return (
@@ -257,89 +236,100 @@ export default function Dashboard() {
             </div>
             
             {combinedTasks.length > 0 ? (
-              <div className="space-y-1">
-                {combinedTasks.map(task => (
-                  <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg border border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all group">
+              <div className="space-y-1.5 flex flex-col">
+                {combinedTasks.map(task => {
+                  const isDone = task.status === 'completed';
+                  const isOverdue = !isDone && isBefore(parseISO(task.deadline), startOfDay(today));
+                  
+                  return (
+                  <div key={task.id} className={cn(
+                    "flex items-center gap-3 p-2.5 rounded-lg border transition-all group",
+                    isDone ? "border-transparent bg-transparent opacity-60" :
+                    isOverdue ? "border-rose-200 bg-rose-50 hover:bg-rose-100 hover:border-rose-300 -order-1 mb-1" :
+                    "border-transparent hover:border-slate-200 hover:bg-slate-50"
+                  )}>
                     <button onClick={() => toggleTaskStatus(task)} className="flex-shrink-0">
-                      {task.status === 'completed' ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      {isDone ? (
+                        <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500" />
                       ) : (
-                        <Circle className="w-4 h-4 text-slate-200 group-hover:text-indigo-400 transition-colors" />
+                        <Circle className={cn("w-4.5 h-4.5 transition-colors", isOverdue ? "text-rose-400 group-hover:text-rose-500" : "text-slate-300 group-hover:text-indigo-400")} />
                       )}
                     </button>
-                    <p className={cn(
-                      "text-xs font-bold truncate tracking-tight transition-all",
-                      task.status === 'completed' ? "text-slate-300 line-through font-medium" : "text-slate-600 group-hover:text-slate-900"
-                    )}>
-                      {task.title}
-                    </p>
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                       {isOverdue && <AlertCircle className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />}
+                      <p className={cn(
+                        "text-sm font-bold truncate tracking-tight transition-all",
+                        isDone ? "text-slate-400 line-through font-medium" : 
+                        isOverdue ? "text-rose-700" : "text-slate-700 group-hover:text-slate-900"
+                      )}>
+                        {task.title}
+                      </p>
+                    </div>
                   </div>
-                ))}
+                )})}
               </div>
             ) : (
-              <div className="py-6 text-center">
-                <p className="text-[9px] font-black text-slate-200 uppercase tracking-widest">No plans yet</p>
+              <div className="py-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No plans yet</p>
               </div>
             )}
           </section>
         </div>
 
-        {/* Right Column: Plans & Diary */}
+        {/* Right Column: Plans */}
         <div className="space-y-5">
           <section className="bg-white border border-slate-200/60 rounded-xl p-4 shadow-sm">
             <h2 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
               Schedule
             </h2>
-            <div className="space-y-1">
+            {combinedPlans.length > 0 ? (
+            <div className="space-y-1.5 flex flex-col">
               {combinedPlans.map(plan => {
                 const material = materials.find(m => m.id === plan.materialId);
+                const isDone = plan.isCompleted;
+                const isOverdue = !isDone && isBefore(parseISO(plan.date), startOfDay(today));
+                
                 return (
-                  <div key={plan.id} className="flex flex-col p-2 rounded-lg border border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all group">
+                  <div key={plan.id} className={cn(
+                    "flex flex-col p-2.5 rounded-lg border transition-all group",
+                    isDone ? "opacity-60 border-transparent" :
+                    isOverdue ? "border-rose-200 bg-rose-50 hover:bg-rose-100 hover:border-rose-300 -order-1 mb-1" :
+                    "border-transparent hover:border-slate-200 hover:bg-slate-50"
+                  )}>
                     <div className="flex items-center gap-3">
                       <button onClick={() => togglePlanStatus(plan)} className="flex-shrink-0">
-                        {plan.isCompleted ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        {isDone ? (
+                          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500" />
                         ) : (
-                          <Circle className="w-4 h-4 text-slate-200 group-hover:text-indigo-400 transition-colors" />
+                          <Circle className={cn("w-4.5 h-4.5 transition-colors", isOverdue ? "text-rose-400 group-hover:text-rose-500" : "text-slate-300 group-hover:text-indigo-400")} />
                         )}
                       </button>
-                      <p className={cn("text-xs font-bold truncate tracking-tight", plan.isCompleted ? "text-slate-300 line-through font-medium" : "text-slate-600 group-hover:text-slate-900")}>
-                        {plan.planText}
-                      </p>
+                      <div className="flex-1 min-w-0 flex items-center gap-2">
+                        {isOverdue && <AlertCircle className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />}
+                        <p className={cn("text-sm font-bold truncate tracking-tight", 
+                          isDone ? "text-slate-400 line-through font-medium" : 
+                          isOverdue ? "text-rose-700" : "text-slate-700 group-hover:text-slate-900"
+                        )}>
+                          {plan.planText}
+                        </p>
+                      </div>
                     </div>
                     {material && (
-                      <div className="flex items-center gap-1.5 mt-1 ml-7 opacity-80">
-                        <div className={cn("w-1.5 h-1.5 rounded-full shadow-sm", material.color)} />
-                        <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">{material.name}</span>
+                      <div className="flex items-center gap-1.5 mt-1.5 ml-7 opacity-80">
+                        <div className={cn("w-2 h-2 rounded-full shadow-sm", material.color)} />
+                        <span className={cn("text-[9px] font-black uppercase tracking-widest", isOverdue ? "text-rose-500" : "text-slate-400")}>{material.name}</span>
                       </div>
                     )}
                   </div>
                 );
               })}
             </div>
-          </section>
-
-          <section className="bg-white border border-slate-900/10 rounded-xl p-4 shadow-lg shadow-slate-100 relative">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] flex items-center gap-2">
-                <PenLine className="w-3 h-3" />
-                Notes
-              </h2>
-              <button 
-                onClick={handleSaveDiary}
-                disabled={isSavingDiary || !diaryContent.trim()}
-                className="text-[9px] font-black uppercase text-indigo-600 hover:text-indigo-700 disabled:opacity-20 transition-all"
-              >
-                {isSavingDiary ? 'Syncing...' : 'Quick Save'}
-              </button>
-            </div>
-            <textarea
-              value={diaryContent}
-              onChange={(e) => setDiaryContent(e.target.value)}
-              placeholder="What did you achieve today?"
-              className="w-full h-20 bg-slate-50/50 border-none rounded-lg p-2.5 text-[12px] text-slate-600 placeholder:text-slate-200 focus:ring-0 resize-none font-medium"
-            />
+            ) : (
+              <div className="py-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No plans yet</p>
+              </div>
+            )}
           </section>
         </div>
       </div>

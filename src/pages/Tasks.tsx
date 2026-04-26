@@ -89,24 +89,24 @@ export default function Tasks() {
 
     if (isEditing) {
       return (
-        <div key={plan.id} className="p-4 bg-white border-2 border-slate-900 rounded-2xl shadow-lg animate-in zoom-in-95 duration-200">
-          <div className="flex flex-col gap-4">
+        <div key={plan.id} className="p-3 bg-white border border-indigo-200 rounded-xl shadow-sm animate-in zoom-in-95 duration-200">
+          <div className="flex flex-col gap-3">
             <div>
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">予定の内容</label>
+              <label className="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Plan Details</label>
               <input
                 autoFocus
                 type="text"
                 value={editPlanText}
                 onChange={(e) => setEditPlanText(e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 bg-slate-50/50 border border-slate-200/60 rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
-              <button onClick={() => setEditingPlanId(null)} className="flex-1 py-2.5 text-slate-500 font-bold text-sm hover:bg-slate-50 rounded-xl transition-colors">
-                キャンセル
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-50">
+              <button onClick={() => setEditingPlanId(null)} className="px-3 py-1.5 text-slate-400 font-bold text-xs hover:bg-slate-50 hover:text-slate-600 rounded-lg transition-colors">
+                Cancel
               </button>
-              <button onClick={() => handleUpdatePlan(plan.id)} className="flex-[2] py-2.5 bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 rounded-xl transition-colors shadow-md">
-                保存する
+              <button onClick={() => handleUpdatePlan(plan.id)} className="px-3 py-1.5 bg-indigo-500 text-white font-bold text-xs hover:bg-indigo-600 rounded-lg transition-colors shadow-sm">
+                Save
               </button>
             </div>
           </div>
@@ -115,47 +115,47 @@ export default function Tasks() {
     }
 
     return (
-      <div key={plan.id} className="flex items-center justify-between p-4 bg-white border border-rose-200 bg-rose-50/30 rounded-2xl transition-all duration-200 group">
-        <div className="flex items-center gap-4 min-w-0">
+      <div key={plan.id} className="flex items-center justify-between p-3 bg-white border border-rose-200 bg-rose-50/50 rounded-xl transition-all duration-200 group">
+        <div className="flex items-center gap-3 min-w-0">
           <button 
             onClick={() => updateStudyPlan(plan.id, { isCompleted: true })}
             className="flex-shrink-0"
           >
-            <Circle className="w-6 h-6 text-slate-300 hover:text-slate-400 transition-colors" />
+            <Circle className="w-5 h-5 text-rose-300 hover:text-rose-400 transition-colors" />
           </button>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <div className={cn("w-2 h-2 rounded-full", material.color)} />
-              <span className="font-bold text-sm lg:text-base truncate text-slate-900">
+              <span className="font-bold text-sm truncate text-slate-800">
                 {plan.planText}
               </span>
             </div>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[11px] font-bold text-rose-600 uppercase tracking-tight">
-                予定日: {format(parseISO(plan.date), 'yyyy年M月d日 (E)', { locale: ja })}
+            <div className="flex items-center gap-2 mt-[2px]">
+              <span className="text-[9px] font-black uppercase tracking-widest text-rose-500">
+                {format(parseISO(plan.date), 'yyyy.MM.dd')}
               </span>
-              <span className="text-[10px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold uppercase">期限切れ</span>
-              <span className="text-[10px] text-slate-400 font-bold">({material.name})</span>
+              <span className="text-[8px] bg-rose-100/50 text-rose-600 px-1 py-[1px] rounded font-black uppercase tracking-wider">Missed</span>
+              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 opacity-60 ml-1">{material.name}</span>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => {
               setEditingPlanId(plan.id);
               setEditPlanText(plan.planText);
             }}
-            className="p-2.5 text-slate-300 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all"
-            title="編集"
+            className="p-1.5 text-slate-300 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all"
+            title="Edit"
           >
-            <Edit2 className="w-4.5 h-4.5" />
+            <Edit2 className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => deleteStudyPlan(plan.id)}
-            className="p-2.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-            title="削除"
+            className="p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+            title="Delete"
           >
-            <Trash2 className="w-4.5 h-4.5" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -168,25 +168,25 @@ export default function Tasks() {
 
     if (isEditing) {
       return (
-        <div key={task.id} className="p-4 bg-white border-2 border-slate-900 rounded-2xl shadow-lg animate-in zoom-in-95 duration-200">
-          <div className="flex flex-col gap-4">
+        <div key={task.id} className="p-3 bg-white border border-indigo-200 rounded-xl shadow-sm animate-in zoom-in-95 duration-200">
+          <div className="flex flex-col gap-3">
             <div>
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">タスク名</label>
+              <label className="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Task Title</label>
               <input
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+                className="w-full px-3 py-2 bg-slate-50/50 border border-slate-200/60 rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">締め切り日</label>
+                <label className="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Deadline</label>
                 <input
                   type="date"
                   value={editDeadline}
                   onChange={(e) => setEditDeadline(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+                  className="w-full px-3 py-2 bg-slate-50/50 border border-slate-200/60 rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
               <div className="flex items-end pb-1">
@@ -195,18 +195,18 @@ export default function Tasks() {
                     type="checkbox"
                     checked={editPriority}
                     onChange={(e) => setEditPriority(e.target.checked)}
-                    className="rounded-lg border-slate-300 text-rose-500 focus:ring-rose-500 w-6 h-6"
+                    className="rounded border-slate-300 text-rose-500 focus:ring-rose-500 w-4 h-4"
                   />
-                  <span className="text-xs font-bold text-slate-600">重要</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">Priority</span>
                 </label>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
-              <button onClick={cancelEditing} className="flex-1 py-2.5 text-slate-500 font-bold text-sm hover:bg-slate-50 rounded-xl transition-colors">
-                キャンセル
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-50">
+              <button onClick={cancelEditing} className="px-3 py-1.5 text-slate-400 font-bold text-xs hover:bg-slate-50 hover:text-slate-600 rounded-lg transition-colors">
+                Cancel
               </button>
-              <button onClick={() => handleUpdate(task.id)} className="flex-[2] py-2.5 bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 rounded-xl transition-colors shadow-md">
-                保存する
+              <button onClick={() => handleUpdate(task.id)} className="px-3 py-1.5 bg-indigo-500 text-white font-bold text-xs hover:bg-indigo-600 rounded-lg transition-colors shadow-sm">
+                Save
               </button>
             </div>
           </div>
@@ -218,61 +218,61 @@ export default function Tasks() {
       <div 
         key={task.id} 
         className={cn(
-          "flex items-center justify-between p-4 bg-white border rounded-2xl transition-all duration-200 group",
+          "flex items-center justify-between p-3 bg-white border rounded-xl transition-all duration-200 group",
           isDone 
-            ? "border-slate-100 bg-slate-50/50 opacity-60" 
-            : "border-slate-200 hover:border-slate-300 hover:shadow-md",
-          isOverdue && !isDone ? "border-rose-200 bg-rose-50/30" : ""
+            ? "border-transparent bg-transparent opacity-60" 
+            : "border-slate-200/60 hover:border-slate-300",
+          isOverdue && !isDone ? "border-rose-200 bg-rose-50/50" : ""
         )}
       >
-        <div className="flex items-center gap-4 min-w-0">
+        <div className="flex items-center gap-3 min-w-0">
           <button 
             onClick={() => updateTask(task.id, { status: isDone ? 'pending' : 'completed' })}
             className="flex-shrink-0"
           >
             {isDone ? (
-              <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
             ) : (
-              <Circle className="w-6 h-6 text-slate-300 hover:text-slate-400 transition-colors" />
+              <Circle className="w-5 h-5 text-slate-200 hover:text-slate-400 transition-colors" />
             )}
           </button>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              {task.isPriority && !isDone && <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0" />}
+              {task.isPriority && !isDone && <AlertCircle className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />}
               <span className={cn(
-                "font-bold text-sm lg:text-base truncate",
-                isDone ? "text-slate-400 line-through" : "text-slate-900"
+                "font-bold text-sm truncate tracking-tight transition-colors",
+                isDone ? "text-slate-400 line-through font-medium" : "text-slate-800"
               )}>
                 {task.title}
               </span>
             </div>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2 mt-[2px]">
               <span className={cn(
-                "text-[11px] font-bold uppercase tracking-tight",
-                isOverdue && !isDone ? "text-rose-600" : "text-slate-400"
+                "text-[9px] font-black uppercase tracking-widest",
+                isOverdue && !isDone ? "text-rose-500" : "text-slate-400"
               )}>
-                {format(parseISO(task.deadline), 'yyyy年M月d日 (E)', { locale: ja })}
+                {format(parseISO(task.deadline), 'yyyy.MM.dd')}
               </span>
               {isOverdue && !isDone && (
-                <span className="text-[10px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold uppercase">期限切れ</span>
+                <span className="text-[8px] bg-rose-100/50 text-rose-600 px-1 py-[1px] rounded font-black uppercase tracking-wider">Missed</span>
               )}
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => startEditing(task)}
-            className="p-2.5 text-slate-300 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all"
-            title="編集"
+            className="p-1.5 text-slate-300 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all"
+            title="Edit"
           >
-            <Edit2 className="w-4.5 h-4.5" />
+            <Edit2 className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => deleteTask(task.id)}
-            className="p-2.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-            title="削除"
+            className="p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+            title="Delete"
           >
-            <Trash2 className="w-4.5 h-4.5" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -281,67 +281,67 @@ export default function Tasks() {
 
   return (
     <div className="p-4 lg:p-10 max-w-5xl mx-auto w-full">
-      <header className="mb-8 lg:mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">タスク管理</h1>
-        <p className="text-slate-500 mt-2 font-medium">単発の締め切りや予定（提出物、模試など）を管理します。</p>
+      <header className="mb-6 lg:mb-8">
+        <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">Tasks</h1>
+        <p className="text-slate-400 mt-1 font-black text-[9px] uppercase tracking-[0.2em] opacity-40">Manage your deadlines</p>
       </header>
 
       {/* Overdue Items Section */}
       {(overdueTasks.length > 0 || overduePlans.length > 0) && (
-        <section className="mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-            <h2 className="text-sm font-bold text-rose-600 uppercase tracking-widest">最重要: 期限切れの項目</h2>
+        <section className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+            <h2 className="text-[9px] font-black text-rose-500 uppercase tracking-[0.2em]">Overdue</h2>
           </div>
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             {overdueTasks.map(task => renderTaskItem(task, true))}
             {overduePlans.map(plan => renderStudyPlanItem(plan))}
           </div>
         </section>
       )}
 
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 lg:p-8 mb-10 shadow-sm">
-        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 lg:mb-6">新規タスクの追加</h2>
+      <div className="bg-white border border-slate-200/60 rounded-xl p-4 lg:p-6 mb-8 shadow-sm">
+        <h2 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-4">New Task</h2>
         <form onSubmit={handleAdd} className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
             <div className="md:col-span-6">
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">タスク名</label>
+              <label className="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Task Title</label>
               <input
                 type="text"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="例: 英語の課題プリント提出"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+                placeholder="Ex) Submit math assignment"
+                className="w-full px-3 py-2 bg-slate-50/50 border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-all text-sm font-medium"
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1.5">締め切り日</label>
+              <label className="block text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Deadline</label>
               <input
                 type="date"
                 value={newDeadline}
                 onChange={(e) => setNewDeadline(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+                className="w-full px-3 py-2 bg-slate-50/50 border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-all text-sm font-medium"
               />
             </div>
-            <div className="md:col-span-3 flex items-center justify-between gap-4">
+            <div className="md:col-span-3 flex items-center justify-between gap-3">
               <label className="flex items-center gap-2 cursor-pointer group py-2">
                 <input
                   type="checkbox"
                   checked={isPriority}
                   onChange={(e) => setIsPriority(e.target.checked)}
-                  className="rounded-lg border-slate-300 text-rose-500 focus:ring-rose-500 w-6 h-6 transition-all"
+                  className="rounded border-slate-300 text-rose-500 focus:ring-rose-500 w-4 h-4 transition-all"
                 />
-                <span className="text-sm font-semibold text-slate-600 group-hover:text-slate-900 transition-colors flex items-center gap-1">
-                  重要
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 group-hover:text-slate-900 transition-colors">
+                  Priority
                 </span>
               </label>
               <button
                 type="submit"
                 disabled={!newTitle.trim()}
-                className="flex-1 px-6 py-3.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-200 active:scale-[0.98]"
+                className="flex-1 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
               >
-                <Plus className="w-4 h-4" />
-                追加
+                <Plus className="w-3.5 h-3.5" />
+                Add
               </button>
             </div>
           </div>
@@ -349,30 +349,30 @@ export default function Tasks() {
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4">
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest">タスク一覧</h2>
+            <h2 className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">All Tasks</h2>
             <button 
               onClick={() => setShowCompleted(!showCompleted)}
               className={cn(
-                "text-[10px] font-bold px-2 py-1 rounded-md transition-all",
-                showCompleted ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                "text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded transition-all",
+                showCompleted ? "bg-slate-800 text-slate-100" : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
               )}
             >
-              {showCompleted ? "完了済みを隠す" : "完了済みを表示"}
+              {showCompleted ? "Hide Done" : "Show Done"}
             </button>
           </div>
-          <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md">
-            {filteredTasks.length} 件
+          <span className="text-[9px] font-black text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase">
+            {filteredTasks.length} Items
           </span>
         </div>
         
         {filteredTasks.length === 0 ? (
-          <div className="py-20 text-center bg-white border border-dashed border-slate-200 rounded-2xl">
-            <p className="text-sm text-slate-400 font-medium">表示できるタスクはありません。</p>
+          <div className="py-12 text-center border-dashed border-slate-200/60 border rounded-xl">
+            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No matching tasks</p>
           </div>
         ) : (
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             {filteredTasks.map(task => renderTaskItem(task))}
           </div>
         )}

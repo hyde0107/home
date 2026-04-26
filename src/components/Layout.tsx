@@ -11,13 +11,12 @@ export default function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItems = [
-    { name: 'ダッシュボード', path: '/', icon: LayoutDashboard },
-    { name: 'カレンダー', path: '/calendar', icon: Calendar },
-    { name: '月間ロードマップ', path: '/monthly', icon: CalendarDays },
-    { name: '週間プランナー', path: '/weekly', icon: CalendarRange },
-    { name: 'タスク管理', path: '/tasks', icon: CheckSquare },
-    { name: '教材管理', path: '/materials', icon: BookOpen },
-    { name: '学習日記', path: '/diary', icon: PenLine },
+    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'Calendar', path: '/calendar', icon: Calendar },
+    { name: 'Roadmap', path: '/monthly', icon: CalendarDays },
+    { name: 'Planner', path: '/weekly', icon: CalendarRange },
+    { name: 'Tasks', path: '/tasks', icon: CheckSquare },
+    { name: 'Materials', path: '/materials', icon: BookOpen },
   ];
 
   const handleLogin = async () => {
@@ -149,23 +148,23 @@ export default function Layout() {
             <div className="fixed inset-0 bg-slate-50 z-[100]" />
           ) : !user ? (
             <div className="fixed inset-0 flex items-center justify-center bg-slate-50 p-4 z-[100]">
-              <div className="max-w-md w-full bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 text-center">
-                <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl rotate-3">
-                  <FileCode2 className="w-10 h-10 text-white" />
+              <div className="max-w-[340px] w-full bg-white p-8 lg:p-10 rounded-3xl shadow-2xl shadow-slate-200/50 border border-slate-100 text-center">
+                <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl -rotate-2">
+                  <FileCode2 className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">StudyFlow</h2>
-                <p className="text-slate-500 mb-10 text-sm lg:text-base leading-relaxed font-medium">
-                  あなたの学習をスマートに管理。<br />
-                  Googleアカウントで今すぐ始めましょう。
+                <h2 className="text-2xl font-black text-slate-900 mb-2 tracking-tight uppercase">StudyFlow</h2>
+                <p className="text-slate-400 mb-8 text-[11px] font-black uppercase tracking-[0.2em] leading-relaxed">
+                  Manage your learning<br />
+                  Log in to start
                 </p>
                 <button 
                   onClick={handleLogin}
-                  className="inline-flex items-center justify-center gap-3 w-full px-6 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all duration-300 shadow-lg shadow-slate-300 active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-3 w-full px-6 py-3.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-all duration-300 shadow-sm active:scale-[0.98]"
                 >
-                  <LogIn className="w-5 h-5" />
-                  Googleでログイン
+                  <LogIn className="w-4 h-4" />
+                  Sign in with Google
                 </button>
-                <p className="mt-8 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                <p className="mt-8 text-[9px] text-slate-300 font-black uppercase tracking-widest">
                   Secure & Private
                 </p>
               </div>

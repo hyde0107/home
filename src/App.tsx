@@ -12,7 +12,6 @@ import MonthlyPlanner from './pages/MonthlyPlanner';
 import WeeklyPlanner from './pages/WeeklyPlanner';
 import Tasks from './pages/Tasks';
 import Materials from './pages/Materials';
-import Diary from './pages/Diary';
 
 export default function App() {
   return (
@@ -26,7 +25,6 @@ export default function App() {
             <Route path="weekly" element={<WeeklyPlanner />} />
             <Route path="tasks" element={<Tasks />} />
             <Route path="materials" element={<Materials />} />
-            <Route path="diary" element={<Diary />} />
           </Route>
         </Routes>
       </BrowserRouter>

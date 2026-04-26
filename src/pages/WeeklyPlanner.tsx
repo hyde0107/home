@@ -29,33 +29,33 @@ const StudyPlanItem: React.FC<StudyPlanItemProps> = ({ plan, material, updateStu
 
   if (isEditing) {
     return (
-      <div className="p-2 bg-white border-2 border-slate-900 rounded-md shadow-md space-y-2 z-10 relative">
-        <div className="space-y-1">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">内容</label>
+      <div className="p-3 bg-white border border-indigo-200 rounded-xl shadow-sm z-10 relative space-y-3">
+        <div className="space-y-1.5">
+          <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">Plan Details</label>
           <input
             autoFocus
             type="text"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleUpdate(); if (e.key === 'Escape') setIsEditing(false); }}
-            className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+            className="w-full px-2 py-1.5 text-sm font-medium border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50/50"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">日付</label>
+        <div className="space-y-1.5">
+          <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">Date</label>
           <input
             type="date"
             value={editDate}
             onChange={(e) => setEditDate(e.target.value)}
-            className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+            className="w-full px-2 py-1.5 text-sm font-medium border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50/50"
           />
         </div>
-        <div className="flex justify-end gap-1">
-          <button onClick={() => setIsEditing(false)} className="p-1 px-2 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors">
-            キャンセル
+        <div className="flex justify-end gap-2 pt-1">
+          <button onClick={() => setIsEditing(false)} className="px-2 py-1 text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors">
+            Cancel
           </button>
-          <button onClick={handleUpdate} className="p-1 px-2 text-[10px] font-bold text-white bg-slate-900 rounded hover:bg-slate-800 transition-colors flex items-center gap-1">
-            <Plus className="w-3 h-3" /> 保存
+          <button onClick={handleUpdate} className="px-2 py-1 text-[10px] font-bold text-white bg-indigo-500 rounded-md hover:bg-indigo-600 transition-colors shadow-sm">
+            Save
           </button>
         </div>
       </div>
@@ -63,7 +63,7 @@ const StudyPlanItem: React.FC<StudyPlanItemProps> = ({ plan, material, updateStu
   }
 
   return (
-    <div className="group flex flex-col p-2 bg-white border border-slate-200 rounded-md shadow-sm relative hover:border-slate-300 transition-all">
+    <div className="group flex flex-col p-2.5 bg-white border border-slate-200/60 rounded-xl shadow-sm hover:border-slate-300 transition-all">
       <div className="flex items-center gap-1.5 mb-1">
         <div className={cn("w-2 h-2 rounded-full", material.color)} />
         <span className="text-[10px] font-medium text-slate-500 truncate">{material.name}</span>
@@ -109,21 +109,21 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, updateTask, deleteTask }) => 
 
   if (isEditing) {
     return (
-      <div className="p-2 bg-white border-2 border-slate-900 rounded-md shadow-md space-y-2">
+      <div className="p-2 bg-white border border-indigo-200 rounded-xl shadow-sm space-y-2">
         <input
           autoFocus
           type="text"
           value={editTitle}
           onChange={(e) => setEditTitle(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') handleUpdate(); if (e.key === 'Escape') setIsEditing(false); }}
-          className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+          className="w-full px-2 py-1 text-sm font-medium border border-slate-200/60 bg-slate-50/50 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
         />
-        <div className="flex justify-end gap-1">
-          <button onClick={() => setIsEditing(false)} className="p-1 text-slate-400 hover:text-slate-600">
-            <X className="w-3 h-3" />
+        <div className="flex justify-end gap-2">
+          <button onClick={() => setIsEditing(false)} className="px-2 py-1 text-slate-400 font-bold text-[10px] hover:text-slate-600">
+            Cancel
           </button>
-          <button onClick={handleUpdate} className="p-1 text-slate-900 hover:text-slate-700">
-            <Plus className="w-3 h-3" />
+          <button onClick={handleUpdate} className="px-2 py-1 bg-indigo-500 font-bold text-white text-[10px] rounded-md hover:bg-indigo-600 shadow-sm">
+            Save
           </button>
         </div>
       </div>
@@ -131,7 +131,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, updateTask, deleteTask }) => 
   }
 
   return (
-    <div className="group flex items-start gap-2 p-2 bg-white border border-slate-200 rounded-md shadow-sm hover:border-slate-300 transition-all">
+    <div className="group flex items-start gap-2 p-2.5 bg-white border border-slate-200/60 rounded-xl shadow-sm hover:border-slate-300 transition-all">
       {task.isPriority && <AlertCircle className="w-3.5 h-3.5 text-rose-500 flex-shrink-0 mt-0.5" />}
       <span 
         onClick={() => setIsEditing(true)}
@@ -250,25 +250,30 @@ const DayColumn: React.FC<DayColumnProps> = ({
           ))}
           
           {isAddingTask ? (
-            <form onSubmit={handleAddTask} className="flex items-center gap-1">
+            <form onSubmit={handleAddTask} className="flex flex-col gap-2 p-2 border border-indigo-200 bg-white rounded-xl shadow-sm">
               <input
                 autoFocus
                 type="text"
                 value={newTaskTitle}
                 onChange={(e) => setNewTaskTitle(e.target.value)}
-                placeholder="タスク名..."
-                className="flex-1 min-w-0 px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+                placeholder="Title..."
+                className="w-full px-2 py-1.5 text-sm font-medium border border-slate-200/60 bg-slate-50/50 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
-              <button type="button" onClick={() => setIsAddingTask(false)} className="p-1 text-slate-400 hover:text-slate-600">
-                <X className="w-3 h-3" />
-              </button>
+              <div className="flex justify-end gap-2">
+                <button type="button" onClick={() => setIsAddingTask(false)} className="px-2 py-1 text-[10px] font-bold text-slate-400 hover:text-slate-600">
+                  Cancel
+                </button>
+                <button type="submit" disabled={!newTaskTitle.trim()} className="px-2 py-1 text-[10px] font-bold text-white bg-indigo-500 hover:bg-indigo-600 rounded-md shadow-sm disabled:opacity-50">
+                  Add
+                </button>
+              </div>
             </form>
           ) : (
             <button 
               onClick={() => setIsAddingTask(true)}
-              className="w-full py-1 text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded transition-colors flex items-center justify-center gap-1"
+              className="w-full py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors flex items-center justify-center gap-1"
             >
-              <Plus className="w-3 h-3" /> タスク追加
+              <Plus className="w-3 h-3" /> Add Task
             </button>
           )}
         </div>
@@ -296,37 +301,43 @@ const DayColumn: React.FC<DayColumnProps> = ({
           })}
 
           {isAddingPlan ? (
-            <form onSubmit={handleAddPlan} className="p-2 bg-slate-50 border border-slate-200 rounded-md space-y-2">
-              <select
-                value={selectedMaterialId}
-                onChange={handleMaterialSelect}
-                className="w-full px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500 bg-white"
-              >
-                <option value="none">指定なし (フリー学習)</option>
-                {activeMaterials.map(m => (
-                  <option key={m.id} value={m.id}>{m.name}</option>
-                ))}
-              </select>
-              <div className="flex items-center gap-1">
+            <form onSubmit={handleAddPlan} className="p-3 bg-white border border-indigo-200 shadow-sm rounded-xl space-y-3">
+              <div className="space-y-1.5">
+                <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Material</label>
+                <select
+                  value={selectedMaterialId}
+                  onChange={handleMaterialSelect}
+                  className="w-full px-2 py-1.5 text-sm font-medium border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50/50"
+                >
+                  <option value="none">Free study</option>
+                  {activeMaterials.map(m => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Details</label>
                 <input
                   autoFocus
                   type="text"
                   value={planText}
                   onChange={(e) => setPlanText(e.target.value)}
-                  placeholder="例: p.1-10"
-                  className="flex-1 min-w-0 px-2 py-1 text-base md:text-xs border border-slate-300 rounded focus:outline-none focus:border-slate-500"
+                  placeholder="Ex) p.1-10"
+                  className="w-full px-2 py-1.5 text-sm font-medium border border-slate-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50/50"
                 />
-                <button type="button" onClick={() => setIsAddingPlan(false)} className="p-1 text-slate-400 hover:text-slate-600">
-                  <X className="w-3 h-3" />
+              </div>
+              <div className="flex justify-end gap-2 pt-1 border-t border-slate-50">
+                <button type="button" onClick={() => setIsAddingPlan(false)} className="px-2 py-1 text-[10px] font-bold text-slate-400 hover:text-slate-600">
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={!planText.trim()}
+                  className="px-2 py-1 text-[10px] font-bold bg-indigo-500 text-white rounded-md hover:bg-indigo-600 shadow-sm disabled:opacity-50"
+                >
+                  Add
                 </button>
               </div>
-              <button 
-                type="submit"
-                disabled={!planText.trim()}
-                className="w-full py-1 bg-slate-900 text-white text-base md:text-xs font-medium rounded hover:bg-slate-800 disabled:opacity-50"
-              >
-                追加
-              </button>
             </form>
           ) : (
             <button 
@@ -338,9 +349,9 @@ const DayColumn: React.FC<DayColumnProps> = ({
                   setPlanText('');
                 }
               }}
-              className="w-full py-1.5 text-xs text-slate-500 hover:text-slate-700 hover:bg-slate-100 border border-dashed border-slate-300 rounded transition-colors flex items-center justify-center gap-1"
+              className="w-full py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-700 hover:bg-slate-100 border border-dashed border-slate-200 rounded-lg transition-colors flex items-center justify-center gap-1"
             >
-              <Plus className="w-3 h-3" /> 学習予定
+              <Plus className="w-3 h-3" /> Add Plan
             </button>
           )}
         </div>

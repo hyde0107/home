@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Material, Task, WeeklyGoal, StudyPlan, DiaryEntry } from '../types';
+import { Material, Task, WeeklyGoal, StudyPlan } from '../types';
 import { MATERIAL_COLORS } from '../constants';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -16,7 +16,6 @@ interface DataContextType {
   tasks: Task[];
   weeklyGoals: WeeklyGoal[];
   studyPlans: StudyPlan[];
-  diaryEntries: DiaryEntry[];
   addMaterial: (material: Omit<Material, 'id'>) => void;
   updateMaterial: (id: string, material: Partial<Material>) => void;
   deleteMaterial: (id: string) => void;
@@ -27,7 +26,6 @@ interface DataContextType {
   addStudyPlan: (plan: Omit<StudyPlan, 'id'>) => void;
   updateStudyPlan: (id: string, plan: Partial<StudyPlan>) => void;
   deleteStudyPlan: (id: string) => void;
-  saveDiaryEntry: (date: string, content: string, mood?: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -41,7 +39,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [weeklyGoals, setWeeklyGoals] = useState<WeeklyGoal[]>([]);
   const [studyPlans, setStudyPlans] = useState<StudyPlan[]>([]);
-  const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
 
   useEffect(() => {
     if (DEBUG_MODE) return;
@@ -66,7 +63,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       load('tasks', setTasks);
       load('weeklyGoals', setWeeklyGoals);
       load('studyPlans', setStudyPlans);
-      load('diaryEntries', setDiaryEntries);
       return;
     }
 
@@ -75,7 +71,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       setTasks([]);
       setWeeklyGoals([]);
       setStudyPlans([]);
-      setDiaryEntries([]);
       return;
     }
 
@@ -97,16 +92,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       setStudyPlans(snap.docs.map(d => ({ id: d.id, ...d.data() } as StudyPlan)));
     });
 
-    const unsubDiary = onSnapshot(collection(db, `users/${uid}/diaryEntries`), (snap) => {
-      setDiaryEntries(snap.docs.map(d => ({ id: d.id, ...d.data() } as DiaryEntry)));
-    });
-
     return () => {
       unsubMaterials();
       unsubTasks();
       unsubGoals();
       unsubPlans();
-      unsubDiary();
     };
   }, [user]);
 
@@ -222,29 +212,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     await deleteDoc(doc(db, `users/${user.uid}/studyPlans`, id));
   };
 
-  const saveDiaryEntry = async (date: string, content: string, mood?: string) => {
-    if (DEBUG_MODE) {
-      updateLocal('diaryEntries', setDiaryEntries, prev => {
-        const existing = prev.find(e => e.date === date);
-        if (existing) {
-          return prev.map(e => e.id === existing.id ? { ...e, content, mood } : e);
-        }
-        return [...prev, { id: crypto.randomUUID(), date, content, mood, createdAt: Date.now() }];
-      });
-      return;
-    }
-    if (!user || !db) return;
-    const existing = diaryEntries.find(e => e.date === date);
-    const id = existing ? existing.id : crypto.randomUUID();
-    await setDoc(doc(db, `users/${user.uid}/diaryEntries`, id), {
-      id,
-      date,
-      content,
-      mood,
-      createdAt: existing ? existing.createdAt : Date.now()
-    });
-  };
-
   const sortedMaterials = useMemo(() => {
     return [...materials].sort((a, b) => {
       const indexA = MATERIAL_COLORS.indexOf(a.color);
@@ -262,11 +229,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   return (
     <DataContext.Provider value={{
       user, isConfigured, isLoadingAuth,
-      materials: sortedMaterials, tasks, weeklyGoals, studyPlans, diaryEntries,
+      materials: sortedMaterials, tasks, weeklyGoals, studyPlans,
       addMaterial, updateMaterial, deleteMaterial,
       addTask, updateTask, deleteTask, setWeeklyGoal,
-      addStudyPlan, updateStudyPlan, deleteStudyPlan,
-      saveDiaryEntry
+      addStudyPlan, updateStudyPlan, deleteStudyPlan
     }}>
       {children}
     </DataContext.Provider>
