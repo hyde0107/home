@@ -6,7 +6,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 // ★ デバッグモード: true にするとログイン不要でローカルストレージを使って動作確認できます
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 interface DataContextType {
   user: User | null;
